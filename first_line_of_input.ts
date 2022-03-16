@@ -4,12 +4,12 @@ import { getSecondLineOfInput } from "./second_line_of_input";
 
 const directions = ["N", "E", "W", "S"];
 
-export type coordinatePosition = {
+export type CoordinatePosition = {
   xycoordinates: Coordinates;
   direction: string;
 };
 
-export let currentPosition: coordinatePosition = {
+export let currentPosition: CoordinatePosition = {
   xycoordinates: { X: 0, Y: 0 },
   direction: "",
 };
@@ -22,11 +22,12 @@ export function getFirstLineOfInput() {
 
   print("Now we can start our mission!! ");
   askQuestion(
-    "Please enter the first line of input separated by space: ",
+    "Please enter the first line of input separated by space (eg: 1 1 N): ",
     checkFirstLineOfInput
   );
 }
 
+//If coordinates are valid get second line of input
 function checkFirstLineOfInput(coordinates: string) {
   if (coordinates && coordinates.length > 0) {
     if (checkIfCordinatesAreValid(coordinates)) {
@@ -42,6 +43,8 @@ function checkFirstLineOfInput(coordinates: string) {
   }
 }
 
+//This function ensures the first line cooridinates are greater than 0 and less than/equal to Upper right coordinates
+//Ensures the directions are correct
 function checkIfCordinatesAreValid(coordinates: string) {
   let firstLineOfInput: string[] = coordinates
     .replace(/\s+/g, " ")
@@ -49,20 +52,16 @@ function checkIfCordinatesAreValid(coordinates: string) {
     .split(" ");
 
   if (firstLineOfInput.length != 3) return false;
-  currentPosition = {
-    xycoordinates: {
-      X: Number(firstLineOfInput[0]),
-      Y: Number(firstLineOfInput[1]),
-    },
-    direction: firstLineOfInput[2],
-  };
+  currentPosition.xycoordinates.X = Number(firstLineOfInput[0]);
+  currentPosition.xycoordinates.Y = Number(firstLineOfInput[1]);
+  currentPosition.direction = firstLineOfInput[2].toUpperCase();
 
   if (
-    !directions.includes(currentPosition.direction) ||
-    Number(currentPosition.xycoordinates.X) < 0 ||
-    Number(currentPosition.xycoordinates.X) > upperRightCoordinates.X ||
-    Number(currentPosition.xycoordinates.Y) < 0 ||
-    Number(currentPosition.xycoordinates.Y) > upperRightCoordinates.Y
+    !directions.includes(currentPosition.direction.toUpperCase()) ||
+    currentPosition.xycoordinates.X < 0 ||
+    currentPosition.xycoordinates.X > upperRightCoordinates.X ||
+    currentPosition.xycoordinates.Y < 0 ||
+    currentPosition.xycoordinates.Y > upperRightCoordinates.Y
   )
     return false;
   return true;
