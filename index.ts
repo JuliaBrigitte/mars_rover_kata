@@ -21,27 +21,25 @@ export function acceptCoordinates(): void {
   );
 }
 
-function failImmediately(): void {
-  clear(false);
-  return endMarsRover();
-}
-
+//This function ensures the Upper Right cooridinates are valid
+//Ensures the coordinates are greater than 0
+//Ensures there are only 2 coordinates provided
 function checkIfCordinatesAreValid(coordinates: string) {
+  //remove all the extra spaces in input string
   var xy_coordinates: string[] = coordinates
     .replace(/\s+/g, " ")
     .trim()
     .split(" ");
   if (xy_coordinates.length != 2) return false;
   if (Number(xy_coordinates[0]) > 0 && Number(xy_coordinates[1]) > 0) {
-    upperRightCoordinates = {
-      X: Number(xy_coordinates[0]),
-      Y: Number(xy_coordinates[1]),
-    };
+    upperRightCoordinates.X = Number(xy_coordinates[0]);
+    upperRightCoordinates.Y = Number(xy_coordinates[1]);
     return true;
   }
   return false;
 }
 
+//If coordinates are valid get first line of input
 function startMarsRover(coordinates: string): void {
   if (coordinates && coordinates.length > 0) {
     if (checkIfCordinatesAreValid(coordinates)) {
@@ -64,3 +62,7 @@ export function endMarsRover(): void {
 }
 
 acceptCoordinates();
+
+module.exports = {
+  acceptCoordinates,
+};
