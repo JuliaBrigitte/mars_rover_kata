@@ -1,12 +1,12 @@
 import { endMarsRover, upperRightCoordinates } from "./index";
 import { clear, print, askQuestion } from "./console";
 import {
-  coordinatePosition,
+  CoordinatePosition,
   currentPosition,
   getFirstLineOfInput,
 } from "./first_line_of_input";
 
-let newCurrentPosition: coordinatePosition;
+let newCurrentPosition: CoordinatePosition;
 
 export function getSecondLineOfInput() {
   clear(false);
@@ -16,7 +16,7 @@ export function getSecondLineOfInput() {
 
   print("Now we can send our rover on the Mars mission!! ");
   askQuestion(
-    "Please enter the second line of input separated to find the Rover position (Please Enter L/R/N): ",
+    "Please enter the second line of input separated to find the Rover position (Please Enter L/R/M): ",
     checkSecondLineOfInput
   );
 }
@@ -39,11 +39,15 @@ function checkSecondLineOfInput(movement: string) {
 
 function checkIfMovementIsValid(movement: string) {
   let regExpression = new RegExp("L|M|R");
-  return regExpression.test(movement);
+  return regExpression.test(movement.toUpperCase());
 }
 
 function getOutput(movement: string) {
-  var movementArray: string[] = movement.replace(/\s+/g, "").trim().split("");
+  var movementArray: string[] = movement
+    .toUpperCase()
+    .replace(/\s+/g, "")
+    .trim()
+    .split("");
   for (let i = 0; i < movementArray.length; i++) {
     if (movementArray[i] == "L" || movementArray[i] == "R")
       setNewDirection(movementArray[i]);
@@ -61,8 +65,8 @@ function getOutput(movement: string) {
     );
     print("***************************************");
     askQuestion(
-      "Press enter to move your rover further: ",
-      getFirstLineOfInput
+      "Press 'X' to exit or press enter to start again ",
+      checkNextAction
     );
   } else {
     print("***************************************");
@@ -118,4 +122,9 @@ function isValidOutput(): boolean {
   )
     return false;
   return true;
+}
+
+function checkNextAction(action: string): void {
+  if (action.toUpperCase() === "X") process.exit();
+  else getFirstLineOfInput();
 }
