@@ -1,13 +1,15 @@
-import { endMarsRover, upperRightCoordinates } from "./index";
+import { Coordinates, endMarsRover, upperRightCoordinates } from "./index";
 import { clear, print, askQuestion } from "./console";
 import {
   CoordinatePosition,
   currentPosition,
   getFirstLineOfInput,
+  directions,
 } from "./first_line_of_input";
 
 let newCurrentPosition: CoordinatePosition;
 
+//prompt the user to get second line of input
 export function getSecondLineOfInput() {
   clear(false);
   print("------------------------");
@@ -25,7 +27,7 @@ function checkSecondLineOfInput(movement: string) {
   if (movement && movement.length > 0) {
     if (checkIfMovementIsValid(movement)) {
       newCurrentPosition = { ...currentPosition };
-      getOutput(movement);
+      return getOutput(movement);
     } else {
       print("***************************************");
       print("Ohho!! You did not follow the movement rules ☹");
@@ -42,18 +44,50 @@ function checkIfMovementIsValid(movement: string) {
   return regExpression.test(movement.toUpperCase());
 }
 
-function getOutput(movement: string) {
+//This function is for test cases not used in the app itself
+export function getRoverposition(
+  movement: string,
+  upperRightCoordinates1: Coordinates,
+  startPosition: CoordinatePosition
+): string {
+  newCurrentPosition = { ...startPosition };
+  newCurrentPosition.direction = newCurrentPosition.direction.toUpperCase();
+  if (!directions.includes(newCurrentPosition.direction.toUpperCase()))
+    return "Failed";
+
+  return returnRoverPosition(movement);
+}
+
+function returnRoverPosition(movement: string): string {
   var movementArray: string[] = movement
     .toUpperCase()
     .replace(/\s+/g, "")
     .trim()
     .split("");
+
   for (let i = 0; i < movementArray.length; i++) {
     if (movementArray[i] == "L" || movementArray[i] == "R")
       setNewDirection(movementArray[i]);
     else if (movementArray[i] == "M") setOutput();
   }
   if (isValidOutput()) {
+    return (
+      newCurrentPosition.xycoordinates.X.toString() +
+      " " +
+      newCurrentPosition.xycoordinates.Y.toString() +
+      " " +
+      newCurrentPosition.direction
+    );
+  } else {
+    return "Failed";
+  }
+}
+
+function getOutput(movement: string) {
+  if (
+    getRoverposition(movement, upperRightCoordinates, newCurrentPosition) !=
+    "Failed"
+  ) {
     print("Great!! Your rover is currently at the position below ☹");
     print("***************************************");
     print(
@@ -64,10 +98,7 @@ function getOutput(movement: string) {
         newCurrentPosition.direction
     );
     print("***************************************");
-    askQuestion(
-      "Press 'X' to exit or press enter to start again ",
-      checkNextAction
-    );
+    askQuestion("Press  enter to start again ", getFirstLineOfInput);
   } else {
     print("***************************************");
     print("Sadly, your rover has crashed! ☹");
@@ -124,7 +155,8 @@ function isValidOutput(): boolean {
   return true;
 }
 
-function checkNextAction(action: string): void {
-  if (action.toUpperCase() === "X") process.exit();
-  else getFirstLineOfInput();
-}
+//Trying to write code to exit the app if the user does not want to move his rover any further
+// function checkNextAction(action: string): void {
+//   if (action.toUpperCase() === "X") process.exit();
+//   else getFirstLineOfInput();
+// }

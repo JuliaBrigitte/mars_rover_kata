@@ -2,7 +2,7 @@ import { Coordinates, endMarsRover, upperRightCoordinates } from "./index";
 import { clear, print, askQuestion } from "./console";
 import { getSecondLineOfInput } from "./second_line_of_input";
 
-const directions = ["N", "E", "W", "S"];
+export const directions = ["N", "E", "W", "S"];
 
 export type CoordinatePosition = {
   xycoordinates: Coordinates;
@@ -28,7 +28,7 @@ export function getFirstLineOfInput() {
 }
 
 //If coordinates are valid get second line of input
-function checkFirstLineOfInput(coordinates: string) {
+function checkFirstLineOfInput(coordinates: string): void {
   if (coordinates && coordinates.length > 0) {
     if (checkIfCordinatesAreValid(coordinates)) {
       return getSecondLineOfInput();

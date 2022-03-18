@@ -7,7 +7,7 @@ export type Coordinates = {
   Y: number;
 };
 
-export let upperRightCoordinates: Coordinates = { X: 0, Y: 0 };
+export const upperRightCoordinates: Coordinates = { X: 0, Y: 0 };
 
 export function acceptCoordinates(): void {
   clear(false);
@@ -62,7 +62,3 @@ export function endMarsRover(): void {
 }
 
 acceptCoordinates();
-
-module.exports = {
-  acceptCoordinates,
-};
